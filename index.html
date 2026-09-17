@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Portofolio Rahmad Faisal Rizki — mahasiswa Sistem Informasi & web developer enthusiast.">
+    <title>Faisal Rizki — Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <a href="#home" class="logo">Faisal<span>.dev</span></a>
+        <button class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#skills">Skill</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HOME -->
+        <section id="home" class="home">
+            <div class="home-inner">
+                <h2 class="name">Rahmad Faisal Rizki</h2>
+                <p class="role">&lt;Information Systems Student &amp; Web Developer Enthusiast /&gt;</p>
+                <p class="text">
+                    Hello everyone! Saya adalah mahasiswa Sistem Informasi yang memiliki ketertarikan pada
+                    web development, programming, dan database. Saat ini saya terus belajar dan mengembangkan
+                    kemampuan untuk membuat website yang menarik, responsif, dan bermanfaat.
+                </p>
+            </div>
+        </section>
+
+        <!-- ABOUT ME -->
+        <section id="about" class="hero">
+            <div class="hero-content">
+                <div class="section-head"><span class="dot"></span> about.md</div>
+
+                <div class="editor-card card">
+                    <div class="editor-bar">
+                        <span class="traffic red"></span>
+                        <span class="traffic yellow"></span>
+                        <span class="traffic green"></span>
+                        <span class="filename">about-me.md</span>
+                    </div>
+                    <div class="card-body">
+                        <h1>Halo, saya Faisal 👋</h1>
+                        <p>
+                            Saya adalah mahasiswa Sistem Informasi yang sedang mengembangkan kemampuan di
+                            bidang teknologi. Saya tertarik memahami bagaimana sebuah sistem dibangun dari sisi
+                            tampilan hingga data di baliknya, dan senang belajar hal baru lewat proyek-proyek kecil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <img src="mehmed2.jpg" alt="Foto Faisal Rizki">
+            </div>
+        </section>
+
+        <!-- SKILL -->
+        <section id="skills" class="skills">
+            <div class="section-head"><span class="dot"></span> skills.js</div>
+            <h2 class="section-title">Apa yang saya kuasai</h2>
+
+            <div class="editor-card code-block">
+                <pre><span class="ln">1</span><span class="kw">const</span> <span class="pl">faisal</span> = {
+<span class="ln">2</span>  <span class="key">languages</span>: [<span class="str">"HTML"</span>, <span class="str">"CSS"</span>, <span class="str">"JavaScript"</span>, <span class="str">"Python"</span>, <span class="str">"SQL"</span>, <span class="str">"C"</span>, <span class="str">"Java"</span>,]
+<span class="ln">3</span>  <span class="key">frameworks</span>: [<span class="str">"Tailwind CSS"</span>, <span class="str">"Bootstrap"</span>,]
+<span class="ln">4</span>  <span class="key">tools</span>: [<span class="str">"Git"</span>, <span class="str">"MySQL"</span>, <span class="str">"VS Code"</span>],
+<span class="ln">5</span>  <span class="key">currentlyLearning</span>: <span class="str">"Backend & database design"</span>,
+<span class="ln">6</span>  <span class="key">mindset</span>: <span class="str">"belajar sedikit demi sedikit, yang penting istiqomah"</span>
+<span class="ln">7</span>};</pre>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="contact">
+            <div class="section-head"><span class="dot"></span> contact.sh</div>
+            <h2 class="section-title">Mari terhubung</h2>
+
+            <div class="editor-card terminal">
+                <div class="editor-bar">
+                    <span class="traffic red"></span>
+                    <span class="traffic yellow"></span>
+                    <span class="traffic green"></span>
+                    <span class="filename">contact.sh</span>
+                </div>
+                <div class="card-body">
+                    <p class="term-line"><span class="prompt">$</span> email
+                        <a href="mailto:rahmadfaisalrisky@gmail.com">rahmadfaisalrisky@gmail.com</a>
+                    </p>
+                    <p class="term-line"><span class="prompt">$</span> github
+                        <a href="https://github.com/faisalrizkiy" target="_blank"
+                            rel="noopener">github.com/faisalrizkiy</a>
+                    </p>
+                    <p class="term-line"><span class="prompt">$</span> instagram
+                        <a href="https://www.instagram.com/faisalrizkiy_/" target="_blank"
+                            rel="noopener">instagram.com/faisalrizkiy_/</a>
+                    </p>
+
+                    <div class="cta-row">
+                        <a class="btn-primary" href="mailto:rahmadfaisalrisky@gmail.com">Kirim pesan</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 Rahmad Faisal Rizki. Dibuat dengan HTML &amp; CSS.
+    </footer>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const siteNav = document.getElementById('siteNav');
+
+        navToggle.addEventListener('click', () => {
+            const isOpen = siteNav.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        siteNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                siteNav.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>
