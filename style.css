@@ -2,24 +2,30 @@
    Tokens
 --------------------------------------------- */
 :root {
-    --bg: #0b0e14;
-    --bg-elevated: #131826;
-    --bg-panel: #0e1220;
-    --text: #e9edf3;
-    --text-muted: #8b94a3;
-    --accent: #f2a65a;
-    --accent-dim: rgba(242, 166, 90, 0.14);
-    --code-string: #8fd19e;
-    --code-key: #7db3f0;
-    --border: rgba(255, 255, 255, 0.09);
+    /* Palette: putih tulang - abu - hitam */
+    --c-100: #ede6d6; /* putih tulang */
+    --c-300: #b3b3b3;
+    --c-500: #8a8a8a;
+    --c-700: #525252;
+    --ink: #0a0a0a;
 
-    --font-display: "Space Grotesk", "Segoe UI", sans-serif;
-    --font-body: "Inter", "Segoe UI", sans-serif;
+    --bg: #000000;
+    --bg-elevated: #141414;
+    --bg-panel: #0a0a0a;
+    --text: #ede6d6;
+    --text-muted: #b3b3b3;
+    --text-dim: #8a8a8a;
+    --accent: #ede6d6;
+    --accent-dim: rgba(237, 230, 214, 0.14);
+    --border: rgba(237, 230, 214, 0.14);
+
+    --font-display: "Bricolage Grotesque", "Segoe UI", sans-serif;
+    --font-body: "DM Sans", "Segoe UI", sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 /* ---------------------------------------------
-   Reset
+   Reset & dasar
 --------------------------------------------- */
 *,
 html,
@@ -39,13 +45,14 @@ html {
     }
     *, *::before, *::after {
         animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
         transition-duration: 0.001ms !important;
     }
 }
 
 body {
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: var(--c-100);
+    color: var(--ink);
     font-family: var(--font-body);
     line-height: 1.6;
     overflow-x: hidden;
@@ -66,132 +73,273 @@ img {
 }
 
 section {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 100px;
 }
 
+/* teks yang diblok: huruf hitam di atas highlight abu terang
+   (latar harus terang, kalau tidak huruf hitam tidak terbaca di kotak gelap) */
 ::selection {
-    background: var(--accent);
-    color: #10131b;
+    background: var(--c-300);
+    color: #000;
+}
+
+::-moz-selection {
+    background: var(--c-300);
+    color: #000;
 }
 
 :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--c-500);
     outline-offset: 3px;
 }
 
 /* ---------------------------------------------
-   Header / Nav
+   Header / Nav (kapsul melayang)
 --------------------------------------------- */
 header {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 100;
-    height: 65px;
+    width: min(1120px, calc(100% - 28px));
+    height: 62px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 6%;
-    background: rgba(11, 14, 20, 0.6);
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 10px 0 12px;
+    background: rgba(10, 10, 10, 0.82);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    border-radius: 0 0 40px 40px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: header-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes header-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -24px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+header.scrolled {
+    background: rgba(10, 10, 10, 0.94);
+    border-color: rgba(237, 230, 214, 0.22);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* garis progress scroll di tepi bawah */
+.scroll-progress {
+    position: absolute;
+    left: 32px;
+    right: 32px;
+    bottom: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0.8;
+    pointer-events: none;
 }
 
 .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 1.1rem;
     color: var(--text);
-    display: flex;
-    align-items: baseline;
-    gap: 2px;
 }
 
-.logo span {
-    color: var(--accent);
+.logo-mark {
+    width: 38px;
+    height: 38px;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.35s ease;
+    animation: logo-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+}
+
+@keyframes logo-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.5) rotate(-20deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+.logo:hover .logo-mark {
+    transform: rotate(-12deg) scale(1.06);
+}
+
+.logo-text span {
+    color: var(--text-dim);
 }
 
 nav ul {
     display: flex;
-    gap: 40px;
+    gap: 4px;
+    padding: 4px;
+    background: rgba(237, 230, 214, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 999px;
 }
 
 nav a {
-    justify-content: center;
-    font-size: 0.95rem;
+    display: block;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
     color: var(--text-muted);
-    position: relative;
-    padding: 4px 0;
-    transition: color 0.25s ease;
-}
-
-nav a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 0;
-    height: 1px;
-    background: var(--accent);
-    transition: width 0.25s ease;
+    transition: color 0.25s ease, background 0.25s ease;
 }
 
 nav a:hover,
 nav a:focus-visible {
     color: var(--text);
+    background: rgba(237, 230, 214, 0.09);
 }
 
-nav a:hover::after,
-nav a:focus-visible::after {
-    width: 100%;
+nav a.active {
+    background: var(--accent);
+    color: #000;
+}
+
+.nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border: 1px solid var(--c-500);
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.nav-cta:hover,
+.nav-cta:focus-visible {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
 }
 
 .nav-toggle {
     display: none;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 5px;
-    background: none;
-    border: none;
+    width: 42px;
+    height: 42px;
+    background: rgba(237, 230, 214, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 50%;
     cursor: pointer;
-    padding: 6px;
 }
 
 .nav-toggle span {
-    width: 22px;
+    width: 18px;
     height: 2px;
     background: var(--text);
     border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 900px) {
+    .nav-cta {
+        display: none;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    nav {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background: rgba(10, 10, 10, 0.96);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px) scale(0.98);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    }
+
+    nav.open {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 2px;
+        padding: 0;
+        background: none;
+        border: none;
+        border-radius: 0;
+    }
+
+    nav a {
+        padding: 14px 18px;
+        border-radius: 14px;
+        font-size: 1rem;
+    }
 }
 
 /* ---------------------------------------------
-   Home / Hero
+   Home (foto latar hitam-putih)
 --------------------------------------------- */
 .home {
     min-height: 100vh;
     display: flex;
     align-items: flex-end;
-    background:
-        linear-gradient(180deg, rgba(11, 14, 20, 0.35) 0%, rgba(11, 14, 20, 0.55) 55%, var(--bg) 100%),
+    /* warna hitam + blend luminosity = foto jadi hitam-putih */
+    background-color: #000;
+    background-image:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.6) 55%, var(--bg) 100%),
         url('mehmed1.jpg');
+    background-blend-mode: normal, luminosity;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
-}
-
-@media (max-width: 768px) {
-    .home {
-        background-attachment: scroll;
-    }
 }
 
 .home-inner {
     max-width: 720px;
     padding: 0 6% 70px;
-    animation: rise 0.9s ease both;
 }
+
+.home-inner > * {
+    animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.home-inner > .name { animation-delay: 0.15s; }
+.home-inner > .role { animation-delay: 0.35s; }
+.home-inner > .text { animation-delay: 0.55s; }
 
 @keyframes rise {
     from {
@@ -214,8 +362,6 @@ nav a:focus-visible::after {
 }
 
 .role {
-    font-size: 20px;
-    font-style: normal;
     margin: 14px 0 22px;
     color: var(--accent);
     font-family: var(--font-mono);
@@ -229,15 +375,35 @@ nav a:focus-visible::after {
 }
 
 /* ---------------------------------------------
-   Section heading (editor tab motif)
+   Pembungkus section & judul (di atas latar terang)
 --------------------------------------------- */
+.hero,
+.education,
+.skills,
+.projects,
+.contact {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.education,
+.skills,
+.projects,
+.contact {
+    padding: 40px 8% 110px;
+}
+
+.contact {
+    padding-bottom: 130px;
+}
+
 .section-head {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     font-family: var(--font-mono);
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--c-700);
     margin-bottom: 18px;
 }
 
@@ -245,7 +411,7 @@ nav a:focus-visible::after {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--ink);
 }
 
 .section-title {
@@ -254,38 +420,28 @@ nav a:focus-visible::after {
     font-size: clamp(1.6rem, 3vw, 2.1rem);
     margin-bottom: 22px;
     line-height: 1.25;
+    color: var(--ink);
 }
 
 /* ---------------------------------------------
-   About / hero split
+   Kotak gelap (dipakai bersama)
+   Warna teks diset di sini supaya semua judul di dalamnya terbaca
 --------------------------------------------- */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
-    padding: 110px 8%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.hero-content {
-    flex: 1.1;
-}
-
-.hero-content .card {
-    max-width: 600px;
-}
-
-/* editor-window card */
-.editor-card {
+.editor-card,
+.timeline-item,
+.skill-item {
     background: var(--bg-panel);
     border: 1px solid var(--border);
     border-radius: 10px;
+    color: var(--text);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+}
+
+.editor-card {
     overflow: hidden;
 }
 
-.editor-card .editor-bar {
+.editor-bar {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -294,44 +450,73 @@ nav a:focus-visible::after {
     border-bottom: 1px solid var(--border);
 }
 
-.editor-bar .traffic {
+.traffic {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     display: inline-block;
 }
 
-.traffic.red { background: #ef6a5f; }
-.traffic.yellow { background: #f4bf4f; }
-.traffic.green { background: #61c454; }
+.traffic.red { background: var(--c-700); }
+.traffic.yellow { background: var(--c-500); }
+.traffic.green { background: var(--c-300); }
 
 .editor-bar .filename {
     margin-left: 8px;
     font-family: var(--font-mono);
     font-size: 0.78rem;
-    color: var(--text-muted);
+    color: var(--text-dim);
 }
 
 .editor-card .card-body {
     padding: 28px;
 }
 
-.editor-card h1 {
+/* ---------------------------------------------
+   About
+--------------------------------------------- */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    padding: 110px 8%;
+}
+
+.hero-content {
+    width: 100%;
+}
+
+.editor-card .about-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    padding: 40px;
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text h1 {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 1.5rem;
     margin-bottom: 14px;
 }
 
-.editor-card p {
+.about-text p {
     color: var(--text-muted);
     font-size: 1rem;
 }
 
 .hero-image {
-    flex: 1;
+    flex: 0 0 auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
 }
 
 .hero-image img {
@@ -341,7 +526,7 @@ nav a:focus-visible::after {
     object-position: center 20%;
     border-radius: 50%;
     filter: grayscale(100%);
-    transition: 0.5s ease;
+    transition: filter 0.5s ease;
     border: 1px solid var(--border);
 }
 
@@ -349,48 +534,333 @@ nav a:focus-visible::after {
     filter: grayscale(0%);
 }
 
-/* ---------------------------------------------
-   Skills — code block motif
---------------------------------------------- */
-.skills {
-    padding: 40px 8% 120px;
-    max-width: 1200px;
-    margin: 0 auto;
+.socials {
+    display: flex;
+    gap: 12px;
 }
 
-.code-block {
-    font-family: var(--font-mono);
-    font-size: 0.92rem;
-    padding: 28px 30px;
-    overflow-x: auto;
-}
-
-.code-block .ln {
+.socials a {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg-elevated);
     color: var(--text-muted);
-    opacity: 0.55;
-    display: inline-block;
-    width: 24px;
-    user-select: none;
+    transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
-.code-block .kw { color: var(--accent); }
-.code-block .key { color: var(--code-key); }
-.code-block .str { color: var(--code-string); }
-.code-block .pl { color: var(--text-muted); }
+.socials a:hover,
+.socials a:focus-visible {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    transform: translateY(-3px);
+}
 
-.code-block pre {
-    white-space: pre;
+.socials svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 /* ---------------------------------------------
-   Contact — terminal motif
+   Pendidikan (timeline)
 --------------------------------------------- */
-.contact {
-    padding: 40px 8% 130px;
-    max-width: 1200px;
-    margin: 0 auto;
+.timeline {
+    position: relative;
+    max-width: 760px;
+    padding-left: 34px;
 }
 
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.timeline-item {
+    position: relative;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-item:hover {
+    border-color: var(--c-500);
+    transform: translateX(4px);
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -34px;
+    top: 28px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--c-100);
+    border: 2px solid var(--ink);
+}
+
+.timeline-item.current::before {
+    background: var(--ink);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.tl-year {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tl-badge {
+    font-size: 0.7rem;
+    padding: 1px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--c-500);
+    color: var(--c-100);
+}
+
+.tl-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin: 6px 0 2px;
+}
+
+.tl-place {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.tl-place svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke: var(--text-dim);
+}
+
+.tl-desc {
+    margin-top: 8px;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+}
+
+/* ---------------------------------------------
+   Skill (icon)
+--------------------------------------------- */
+.skill-group {
+    margin-bottom: 34px;
+}
+
+.skill-group-title {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--c-700);
+    margin-bottom: 14px;
+}
+
+.skill-group-title .kw {
+    color: var(--ink);
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+    gap: 14px;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 10px 16px;
+    transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+}
+
+.skill-item:hover {
+    border-color: var(--c-500);
+    background: var(--bg-elevated);
+    transform: translateY(-4px);
+}
+
+.skill-item i {
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--c-300);
+    transition: color 0.25s ease;
+}
+
+.skill-item:hover i {
+    color: var(--c-100);
+}
+
+.skill-item span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.skill-note {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin-top: 6px;
+    padding: 18px 22px;
+    border: 1px dashed rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--c-700);
+}
+
+.skill-note b {
+    color: var(--ink);
+    font-weight: 500;
+}
+
+/* ---------------------------------------------
+   Project
+--------------------------------------------- */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 520px));
+    gap: 22px;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.project-card:hover {
+    border-color: var(--c-500);
+    transform: translateY(-4px);
+}
+
+.project-card .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 24px;
+}
+
+.project-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.project-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+}
+
+.project-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--c-100);
+}
+
+.project-status {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--c-700);
+    color: var(--text-muted);
+}
+
+.project-status.live {
+    border-color: var(--c-300);
+    color: var(--c-100);
+}
+
+.project-card h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.project-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.project-tags li {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.project-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-link:hover,
+.project-link:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px var(--accent-dim);
+}
+
+/* ---------------------------------------------
+   Contact (terminal)
+--------------------------------------------- */
 .terminal {
     max-width: 620px;
 }
@@ -405,7 +875,6 @@ nav a:focus-visible::after {
     font-family: var(--font-mono);
     font-size: 0.95rem;
     padding: 7px 0;
-    color: var(--text);
     flex-wrap: wrap;
 }
 
@@ -415,7 +884,6 @@ nav a:focus-visible::after {
 }
 
 .term-line a {
-    color: var(--text);
     border-bottom: 1px dotted var(--border);
     transition: color 0.2s ease, border-color 0.2s ease;
 }
@@ -438,7 +906,7 @@ nav a:focus-visible::after {
     align-items: center;
     gap: 8px;
     background: var(--accent);
-    color: #191305;
+    color: #000;
     font-weight: 600;
     padding: 11px 22px;
     border-radius: 8px;
@@ -455,9 +923,147 @@ nav a:focus-visible::after {
 footer {
     text-align: center;
     padding: 26px 6% 40px;
-    color: var(--text-muted);
+    color: var(--c-700);
     font-size: 0.85rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ---------------------------------------------
+   Animasi
+--------------------------------------------- */
+
+/* Muncul saat di-scroll. Class .reveal ditambahkan lewat JS.
+   Memakai animation (bukan transition) supaya efek hover kartu tetap jalan. */
+.reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translate3d(var(--rx, 0), var(--ry, 36px), 0);
+}
+
+.reveal.is-visible {
+    animation: reveal-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) backwards;
+}
+
+@keyframes reveal-in {
+    from {
+        opacity: 0;
+        transform: translate3d(var(--rx, 0), var(--ry, 36px), 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* About: dibuat lebih pelan */
+#about .reveal.is-visible {
+    animation-duration: 1.4s;
+}
+
+/* foto muncul sedikit setelah teks */
+#about .hero-image.reveal.is-visible {
+    animation-delay: 0.3s;
+}
+
+/* Titik "Ongoing" di timeline berdenyut (hanya transform + opacity, jadi ringan) */
+.timeline-item.current::after {
+    content: "";
+    position: absolute;
+    left: -34px;
+    top: 28px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: var(--ink);
+    pointer-events: none;
+    animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.35; }
+    70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (max-width: 700px) {
+    .timeline-item.current::after {
+        left: -28px;
+    }
+}
+
+/* Badge "Online" dengan titik berkedip */
+.project-status.live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.project-status.live::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-100);
+    animation: blink-soft 1.6s ease-in-out infinite;
+}
+
+@keyframes blink-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+}
+
+/* Kursor terminal */
+.cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1.1em;
+    background: var(--accent);
+    transform: translateY(0.15em);
+    animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* Kursor tidak berkedip saat sedang mengetik/menghapus */
+.cursor.is-typing {
+    animation: none;
+    opacity: 1;
+}
+
+.role .cursor {
+    margin-left: 2px;
+}
+
+/* Teks tersembunyi untuk pembaca layar */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Di layar kecil teks role bisa 2 baris; tinggi dikunci supaya paragraf di bawahnya tidak melompat */
+@media (max-width: 600px) {
+    .role {
+        min-height: 3.2em;
+    }
+}
+
+/* Panah ↗ bergeser saat tombol di-hover */
+.nav-cta span,
+.project-link span {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+
+.nav-cta:hover span,
+.project-link:hover span {
+    transform: translate(2px, -2px);
 }
 
 /* ---------------------------------------------
@@ -466,12 +1072,17 @@ footer {
 @media (max-width: 860px) {
     .hero {
         flex-direction: column;
-        text-align: left;
         padding: 90px 7% 60px;
         gap: 40px;
     }
 
-    .hero-image {
+    .editor-card .about-body {
+        flex-direction: column;
+        gap: 30px;
+        padding: 26px 20px;
+    }
+
+    .about-body .hero-image {
         order: -1;
     }
 
@@ -482,50 +1093,20 @@ footer {
 }
 
 @media (max-width: 700px) {
-    header {
-        border-radius: 0 0 22px 22px;
+    .timeline {
+        padding-left: 28px;
     }
 
-    nav {
-        position: fixed;
-        top: 65px;
-        left: 0;
-        right: 0;
-        background: rgba(11, 14, 20, 0.97);
-        border-bottom: 1px solid var(--border);
-        transform: translateY(-130%);
-        transition: transform 0.3s ease;
+    .timeline-item {
+        padding: 18px;
     }
 
-    nav.open {
-        transform: translateY(0);
+    .timeline-item::before {
+        left: -28px;
     }
 
-    nav ul {
-        flex-direction: column;
-        gap: 0;
-        padding: 10px 6%;
-    }
-
-    nav ul li {
-        border-bottom: 1px solid var(--border);
-    }
-
-    nav ul li:last-child {
-        border-bottom: none;
-    }
-
-    nav a {
-        display: block;
-        padding: 16px 0;
-    }
-
-    .nav-toggle {
-        display: flex;
-    }
-
-    .code-block {
-        font-size: 0.8rem;
-        padding: 22px 18px;
+    .skill-grid {
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        gap: 10px;
     }
 }
